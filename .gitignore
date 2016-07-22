@@ -1,2 +1,9 @@
-.txt
-.~
+.installed.cfg
+*.bat
+*.txt
+*~
+*.pyc
+*.pyo
+*.sql
+*.sqlite3
+.git
