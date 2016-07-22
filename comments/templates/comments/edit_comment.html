@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit comment{% endblock %}
+
+{% block content %}
+    <h2>Edit comment</h2>
+
+    {% if perms.comments.change_comment or user.id == comment.user_id %}
+        {% if error_message %}
+            <div class="alert alert-danger">
+                <strong>{{ error_message }}</strong>
+            </div>
+        {% endif %}
+
+        <form action="{% url 'comments:edit_comment_form' comment.id %}" method="post">
+            {% csrf_token %}
+            <p>
+                <strong>Name</strong>
+                <br>
+                {{ comment.comment_name }}
+            </p>
+            <p>
+                <strong>Email</strong>
+                <br>
+                {% if comment.comment_email %}
+                    {{ comment.comment_email }}
+                {% else %}
+                    not found
+                {% endif %}
+            </p>
+            <fieldset class="form-group">
+                <label for="userComment">Comment</label>
+                <textarea name="comment" class="form-control" id="userComment" rows="3" required>{{ comment.comment_text }}</textarea>
+            </fieldset>
+            <button type="submit" class="btn btn-primary" value="Edit">Save</button>
+        </form>
+    {% else %}
+        <div class="alert alert-info">
+            You are not permissions for Edit comments
+        </div>
+    {% endif %}
+
+    <div class="btn-back">
+        <a class="btn btn-xs btn-default" href="{% url 'comments:index' %}">Go back</a>
+    </div>
+{% endblock %} 

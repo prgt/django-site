@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Comments{% endblock %}
+
+{% block content %}
+ 
+    {% if perms.comments.add_comment %}
+        <a class="btn btn-primary" href="{% url 'comments:add_comment'%}">Add comment</a>
+    {% else %}
+        <div class="alert alert-danger">
+            <strong>You are not permissions for Add comments</strong>
+        </div>
+    {% endif %}
+
+
+    {% if latest_comment_list %}
+        <div class="table-block">
+            <table class="table table-bordered table-striped table-hover table-responsive">
+                <tbody>
+            {% for comment in latest_comment_list %}
+                {% if comment.enabled or perms.comments.change_comment or user.id == comment.user_id %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'comments:detail' comment.id %}">{{ comment.comment_name }}</a>
+                        </td>
+                        <td>{{ comment.pub_date|date:"d.m.Y H:i:s"}}</td>
+                    </tr>
+	            {% endif %}
+            {% endfor %}
+                </tbody> 
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <strong>No comments are available</strong>
+        </div>
+    {% endif %}
+{% endblock %}
+

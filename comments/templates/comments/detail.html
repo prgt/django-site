@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Comment detail{% endblock %}
+
+{% block content %}
+
+    {% if perms.comments.change_comment or comment.enabled or user.id == comment.user_id %}
+        <p>
+            <strong>Name</strong>
+            <br>
+            {{ comment.comment_name}}
+        </p>
+        <p>
+            <strong>Email</strong>
+            <br>{{ comment.comment_email}}
+        </p>
+        <p>
+            <strong>Date</strong>
+            <br>
+            {{ comment.pub_date|date:"d.m.Y H:i:s"}}
+        </p>
+        <p>
+            <strong>Comment</strong>
+            <br>
+            {{ comment.comment_text}}
+        </p>
+    {% else %}
+        <div class="alert alert-danger">
+            <strong>This comment not moderated</strong>
+        </div>
+    {% endif %}
+
+    {% if perms.comments.change_comment %}
+        <p>
+            <a href="{% url 'comments:confirm_comment_form' comment.id %}" class="btn btn-sm 
+                {% if comment.enabled %}btn-success">Comment enabled{% else %}btn-danger">Comment disabled{% endif%}
+            </a>
+        </p>
+    {% endif %}
+
+    {% if perms.comments.change_comment or user.id == comment.user_id %}
+        <p>
+            <a class="btn btn-sm btn-default" href="{% url 'comments:edit_comment' comment.id %}">Edit comment</a>
+        </p>
+    {% endif %}
+
+    {% if perms.comments.delete_comment or user.id == comment.user_id %}
+        <p>
+            <a onclick="return Confirmation();" class="btn btn-default" href="{% url 'comments:del_comment_form' comment.id %}">Delete comment</a>
+        </p>
+    {% endif %}
+
+
+    <div class="btn-back">
+        <a class="btn btn-xs btn-default" href="{% url 'comments:index' %}">Go back</a>
+    </div>
+{% endblock %} 
